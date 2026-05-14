@@ -21,18 +21,20 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.2.0.0
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
-E:\xiangmuji\watch\MDK-ARM\watch.uvprojx
-Project File Date:  05/02/2026
+e:\xiangmuji\watch\MDK-ARM\watch.uvprojx
+Project File Date:  05/10/2026
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\MDK-AEM-CORE\ARM\ARMCC\Bin'
 Build target 'watch'
-compiling rtc.c...
-compiling menu.c...
+compiling mpu6050.c...
+..\Core\bsp\mpu6050.c(71): warning:  #177-D: variable "i"  was declared but never referenced
+  	uint8_t i;
+..\Core\bsp\mpu6050.c: 1 warning, 0 errors
 linking...
-Program Size: Code=21428 RO-data=9020 RW-data=52 ZI-data=2892  
+Program Size: Code=29638 RO-data=9234 RW-data=172 ZI-data=4276  
 FromELF: creating hex file...
-"watch\watch.axf" - 0 Error(s), 0 Warning(s).
+"watch\watch.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -56,7 +58,7 @@ Package Vendor: Keil
 
    * Component: ARM::CMSIS:CORE@5.6.0
       Include file:  CMSIS/Core/Include/tz_context.h
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

@@ -1,5 +1,5 @@
 watch\menu.o: ..\Core\bsp\menu.c
-watch\menu.o: ..\Core\bsp\myrtc.h
+watch\menu.o: ..\Core\bsp\menu.h
 watch\menu.o: ../Core/Inc/main.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 watch\menu.o: ../Core/Inc/stm32f1xx_hal_conf.h
@@ -25,6 +25,7 @@ watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
+watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc_ex.h
@@ -32,8 +33,11 @@ watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 watch\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 watch\menu.o: ..\Core\bsp\oled.h
 watch\menu.o: ..\Core\bsp\font.h
+watch\menu.o: ..\Core\bsp\myrtc.h
 watch\menu.o: ../Core/Inc/rtc.h
 watch\menu.o: ..\Core\bsp\key.h
 watch\menu.o: ..\Core\bsp\settim.h
 watch\menu.o: ..\Core\bsp\led.h
 watch\menu.o: ..\Core\bsp\mpu6050.h
+watch\menu.o: D:\MDK-AEM-CORE\ARM\ARMCC\Bin\..\include\math.h
+watch\menu.o: D:\MDK-AEM-CORE\ARM\ARMCC\Bin\..\include\stdlib.h

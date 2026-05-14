@@ -3,8 +3,135 @@
 #include "font.h"
 #include "key.h"
 #include "MyRTC.h"
+#include <stdint.h>
+#include "menu.h"
 
 extern struct keys key[3];
+
+
+typedef enum        //当前字段
+{
+    SETTIME_BACK = 0,
+    SETTIME_YEAR,
+    SETTIME_MONTH,
+    SETTIME_DAY,
+    SETTIME_HOUR,
+    SETTIME_MIN,
+    SETTIME_SECOND
+} SetTime_Current_t;
+
+typedef enum    //当前模式
+{
+    SETTIME_Mode_Select = 0,    //选择字段
+    SETTIME_Mode_edit           //编辑字段
+}SetTime_Mode_t;
+
+SetTime_Current_t settime_current=SETTIME_BACK;    //默认选择年
+SetTime_Mode_t settime_mode=SETTIME_Mode_Select;    //默认选择字段
+
+//选择模式处理函数
+void settim_select(uint8_t event){
+    if(event==KEY_EVENT_KEY0){
+        settime_current++;
+        if(settime_current>SETTIME_SECOND) settime_current=SETTIME_BACK;
+    }
+    else if(event==KEY_EVENT_KEY1){
+        if(settime_current<=SETTIME_BACK) settime_current=SETTIME_SECOND;
+        else settime_current--;
+    }
+    else if(event==KEY_EVENT_KEY2){
+        
+        if(settime_current==SETTIME_BACK) page_current=PAGE_SET;   //返回设置
+        else settime_mode=SETTIME_Mode_edit;    //进入编辑模式
+        OLED_Clear();
+    }
+}
+
+//编辑模式处理函数
+void settim_edit(uint8_t event){
+    if(event==KEY_EVENT_KEY0){
+        switch(settime_current){
+            case SETTIME_YEAR: MyRTC_Time[0]++;break;
+            case SETTIME_MONTH: {
+                MyRTC_Time[1]++;
+                    if (MyRTC_Time[1]>12) {
+                            MyRTC_Time[1]=1;
+                        }
+                } break;
+            case SETTIME_DAY: {
+                MyRTC_Time[2]++;
+                    if (MyRTC_Time[1]==2 && MyRTC_Time[2]>28) {
+                            MyRTC_Time[2]=1;
+                        }
+                    else if ((MyRTC_Time[1]==4 || MyRTC_Time[1]==6 || MyRTC_Time[1]==9 || MyRTC_Time[1]==11) && MyRTC_Time[2]>30) {
+                            MyRTC_Time[2]=1;
+                        }
+                    else if ((MyRTC_Time[1]==1 || MyRTC_Time[1]==3 || MyRTC_Time[1]==5 || MyRTC_Time[1]==7 || MyRTC_Time[1]==8 || MyRTC_Time[1]==10 || MyRTC_Time[1]==12) &&MyRTC_Time[2]>31) {
+                            MyRTC_Time[2]=1;
+                        }
+            } break;
+            case SETTIME_HOUR: {MyRTC_Time[3]++;
+                        if (MyRTC_Time[3]>23) {
+                            MyRTC_Time[3]=0;
+                        }
+                } break;
+            case SETTIME_MIN:{MyRTC_Time[4]++;
+                        if (MyRTC_Time[4]>59) {
+                            MyRTC_Time[4]=0;
+                        }
+            } break;
+            case SETTIME_SECOND: {MyRTC_Time[5]++;
+                        if (MyRTC_Time[5]>59) {
+                            MyRTC_Time[5]=0;
+                        }
+            };break;
+        }
+        MyRTC_SetTime();
+    }
+    else if(event==KEY_EVENT_KEY1){
+        switch(settime_current){
+            case SETTIME_YEAR: {MyRTC_Time[0]--;
+                        if (MyRTC_Time[0]<1000) {
+                            MyRTC_Time[0]=2099;
+                        }
+                } break;
+            case SETTIME_MONTH: {MyRTC_Time[1]--;
+                        if (MyRTC_Time[1]<1) {
+                            MyRTC_Time[1]=12;
+                        }
+                } break;
+            case SETTIME_DAY: {MyRTC_Time[2]--;
+                        if (MyRTC_Time[2]<1) {
+                            MyRTC_Time[2]=30;
+                        }
+                } break;
+            case SETTIME_HOUR: {
+                        if (MyRTC_Time[3]==0) {
+                            MyRTC_Time[3]=23;   
+                        }
+                        else MyRTC_Time[3]--;
+                } break;
+            case SETTIME_MIN: {
+                        if (MyRTC_Time[4]==0) {
+                            MyRTC_Time[4]=59;
+                        }
+                        else MyRTC_Time[4]--;
+                } break;
+            case SETTIME_SECOND: {
+                        if (MyRTC_Time[5]==0) {
+                            MyRTC_Time[5]=59;
+                        }
+                        else MyRTC_Time[5]--;
+                } break;
+        }
+        MyRTC_SetTime();
+    }
+    else if(event==KEY_EVENT_KEY2){
+        settime_mode=SETTIME_Mode_Select;  //返回选择模式
+    }
+}
+
+
 
 void settim_first_page()
 {
@@ -20,271 +147,51 @@ void settim_second_page()
     OLED_Printf(0, 32, OLED_8X16, "秒:%02d", MyRTC_Time[5]);
 }
 
-//通过改变RTC_TIME[]数组中的值来改变首页显示时钟的时间
-void change_RTC_time(uint8_t i,uint8_t flag){//i:MyRTC_Time[i];flag=1:加，flag=0：减
-	if(flag==1) MyRTC_Time[i]++;
-	else MyRTC_Time[i]--;
-	MyRTC_SetTime();//设置时间，调用此函数，全局数组里时间值刷新到RTC硬件电路
-}
+void settim_draw(){
 
-/********************年月日时分秒按键加减确认********************/
-uint8_t setYear(){
-	while(1){
-	if (key[0].single_flag == 1)
+        if(settime_current <= SETTIME_DAY)
         {
-            change_RTC_time(0,1);
-            key[0].single_flag = 0;
-        }
-        else if (key[1].single_flag == 1)
-        {
-            change_RTC_time(0,0);
-            key[1].single_flag = 0;
-        }
-        else if (key[2].single_flag == 1)
-        {
-			key[2].single_flag = 0;
-			return 0;
-            
-        }
-		settim_first_page();
-		OLED_ReverseArea(24,16,32,16);
-		OLED_Update();
-	}
-}
-uint8_t setMonth(){
-	while(1){
-	if (key[0].single_flag == 1)
-        {
-            change_RTC_time(1,1);
-			if(MyRTC_Time[1]>=13) {MyRTC_Time[1]=1;}
-            key[0].single_flag = 0;
-        }
-        else if (key[1].single_flag == 1)
-        {
-            change_RTC_time(1,0);
-			if(MyRTC_Time[1]<1) {MyRTC_Time[1]=12;}
-            key[1].single_flag = 0;
-        }
-        else if (key[2].single_flag == 1)
-        {
-			key[2].single_flag = 0;
-			return 0;
-            
-        }
-		settim_first_page();
-		OLED_ReverseArea(24,32,16,16);
-		OLED_Update();
-	}
-}
-uint8_t setDay(){
-	while(1){
-	if (key[0].single_flag == 1)
-        {
-            change_RTC_time(2,1);
-			if(MyRTC_Time[2]>=30) {MyRTC_Time[2]=1;}
-            key[0].single_flag = 0;
-        }
-        else if (key[1].single_flag == 1)
-        {
-            change_RTC_time(2,0);
-			if(MyRTC_Time[2]<=0) {MyRTC_Time[2]=30;}
-            key[1].single_flag = 0;
-        }
-        else if (key[2].single_flag == 1)
-        {
-			key[2].single_flag = 0;
-			return 0;
-            
-        }
-		settim_first_page();
-		OLED_ReverseArea(24,48,16,16);
-		OLED_Update();
-	}
-}
-uint8_t setHour(){
-	while(1){
-	if (key[0].single_flag == 1)
-        {
-            change_RTC_time(3,1);
-			if(MyRTC_Time[3]>=24) {MyRTC_Time[3]=0;}
-            key[0].single_flag = 0;
-        }
-        else if (key[1].single_flag == 1)
-        {
-			if(MyRTC_Time[3]<=0) {MyRTC_Time[3]=23;}
-			else change_RTC_time(3,0);
-            key[1].single_flag = 0;
-        }
-        else if (key[2].single_flag == 1)
-        {
-			key[2].single_flag = 0;
-			return 0;
-            
-        }
-		settim_second_page();
-		OLED_ReverseArea(24,0,16,16);
-		OLED_Update();
-	}
-}
-uint8_t setMin(){
-	while(1){
-	if (key[0].single_flag == 1)
-        {
-            change_RTC_time(4,1);
-			if(MyRTC_Time[4]>=60) {MyRTC_Time[4]=0;}
-            key[0].single_flag = 0;
-        }
-        else if (key[1].single_flag == 1)
-        {
-            
-			if(MyRTC_Time[4]<=0) {MyRTC_Time[4]=59;}
-			else change_RTC_time(4,0);
-            key[1].single_flag = 0;
-        }
-        else if (key[2].single_flag == 1)
-        {
-			key[2].single_flag = 0;
-			return 0;
-            
-
-        }
-		settim_second_page();
-		OLED_ReverseArea(24,16,16,16);
-		OLED_Update();
-	}
-}
-uint8_t setSecond(){
-	while(1){
-	if (key[0].single_flag == 1)
-        {
-            change_RTC_time(5,1);
-			if(MyRTC_Time[5]>=60) {MyRTC_Time[5]=0;}
-            key[0].single_flag = 0;
-        }
-        else if (key[1].single_flag == 1)
-        {
-            
-			if(MyRTC_Time[5]<=0) {MyRTC_Time[5]=59;}
-			else change_RTC_time(5,0);
-            key[1].single_flag = 0;
-        }
-        else if (key[2].single_flag == 1)
-        {
-			key[2].single_flag = 0;
-			return 0;
-            
-        }
-		settim_second_page();
-		OLED_ReverseArea(24,32,16,16);
-		OLED_Update();
-	}
-}
-/********************年月日时分秒按键加减确认********************/
-
-
-
-
-
-
-
-
-uint8_t settim_flag = 1;
-uint8_t settim_view()
-{
-    while (1)
-    {
-		uint8_t settim_flag_temp=0;
-        if (key[0].single_flag == 1)
-        {
-            settim_flag++;
-            if (settim_flag >= 8)
-                settim_flag = 1;
-            key[0].single_flag = 0;
-        }
-        if (key[1].single_flag == 1)
-        {
-            settim_flag--;
-            if (settim_flag < 1)
-                settim_flag = 7;
-            key[1].single_flag = 0;
-        }
-        if (key[2].single_flag == 1)
-        {
-            OLED_Clear();
-            OLED_Update();
-			settim_flag_temp=settim_flag;
-            key[2].single_flag = 0;
-        }
-		
-		if(settim_flag_temp==1){return 0;}
-		else if(settim_flag_temp==2) setYear();
-		else if(settim_flag_temp==3) setMonth();
-		else if(settim_flag_temp==4) setDay();
-		else if(settim_flag_temp==5) setHour();
-		else if(settim_flag_temp==6) setMin();
-		else if(settim_flag_temp==7) setSecond();
-			
-		
-        switch (settim_flag)
-        {
-        case 1:
-        {	
-			OLED_Clear();
             settim_first_page();
-            OLED_ReverseArea(0, 0, 16, 16);
-            OLED_Update();
-            break;
         }
-        case 2:
+        else
         {
-			OLED_Clear();
-            settim_first_page();
-            OLED_ReverseArea(0, 16, 16, 16);
-            OLED_Update();
-            break;
-        }
-        case 3:
-        {
-			OLED_Clear();
-            settim_first_page();
-            OLED_ReverseArea(0, 32, 16, 16);
-            OLED_Update();
-            break;
-        }
-        case 4:
-        {
-			OLED_Clear();
-            settim_first_page();
-            OLED_ReverseArea(0, 48, 16, 16);
-            OLED_Update();
-            break;
-        }
-        case 5:
-        {
-			OLED_Clear();
             settim_second_page();
-            OLED_ReverseArea(0, 0, 16, 16);
-            OLED_Update();
-            break;
+        } 
+
+        if (settime_mode==SETTIME_Mode_Select) {
+            switch(settime_current){
+            case SETTIME_BACK: OLED_ReverseArea(0, 0, 16, 16);break;
+            case SETTIME_YEAR: OLED_ReverseArea(0, 16, 16, 16);break;
+            case SETTIME_MONTH: OLED_ReverseArea(0, 32, 16, 16);break;
+            case SETTIME_DAY: OLED_ReverseArea(0, 48, 16, 16);break;
+            case SETTIME_HOUR: OLED_ReverseArea(0, 0, 16, 16);break;
+            case SETTIME_MIN: OLED_ReverseArea(0, 16, 16, 16);break;
+            case SETTIME_SECOND: OLED_ReverseArea(0, 32, 16, 16);break;
+            }
         }
-        case 6:
-        {
-			OLED_Clear();
-            settim_second_page();
-            OLED_ReverseArea(0, 16, 16, 16);
-            OLED_Update();
-            break;
+        else if (settime_mode==SETTIME_Mode_edit) {
+            switch(settime_current){
+            case SETTIME_YEAR: OLED_ReverseArea(24, 16, 32, 16);break;
+            case SETTIME_MONTH: OLED_ReverseArea(24, 32, 16, 16);break;
+            case SETTIME_DAY: OLED_ReverseArea(24, 48, 16, 16);break;
+            case SETTIME_HOUR: OLED_ReverseArea(24, 0, 16, 16);break;
+            case SETTIME_MIN: OLED_ReverseArea(24, 16, 16, 16);break;
+            case SETTIME_SECOND: OLED_ReverseArea(24, 32, 16, 16);break;
+            }
         }
-        case 7:
-        {
-			OLED_Clear();
-            settim_second_page();
-            OLED_ReverseArea(0, 32, 16, 16);
-            OLED_Update();
-            break;
-        }
-        }
+    
+    OLED_Update();
+}
+
+void settim_UI_Task(){
+    OLED_Clear();
+    uint8_t event=Key_GetEvent();
+    if(settime_mode==SETTIME_Mode_Select){
+        settim_select(event);
     }
+    else if(settime_mode==SETTIME_Mode_edit){
+        settim_edit(event);
+    }
+    settim_draw();
 }
-
 

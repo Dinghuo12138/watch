@@ -25,6 +25,7 @@ watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_dma_ex.h
 watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
 watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
+watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc.h
 watch\settim.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc_ex.h
@@ -34,3 +35,4 @@ watch\settim.o: ..\Core\bsp\oled.h
 watch\settim.o: ..\Core\bsp\font.h
 watch\settim.o: ..\Core\bsp\key.h
 watch\settim.o: ..\Core\bsp\MyRTC.h
+watch\settim.o: ..\Core\bsp\menu.h

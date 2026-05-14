@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "rtc.h"
 #include "tim.h"
 #include "gpio.h"
@@ -39,7 +40,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-void view_proc(void);
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -101,56 +102,31 @@ int main(void)
   MX_RTC_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
+  HAL_TIM_Base_Start_IT(&htim3);
   HAL_TIM_PWM_Start(&htim1,TIM_CHANNEL_1);
   delay_init();
   OLED_Init();
   OLED_Clear();
-  menu_init();//初始化外设
-  
-/*******************************测试i2c**************************************/
-//  uint8_t ack;
-//  MyI2C_Init();
-//  myi2c_start();
-//  myi2c_sendByte(MPU6050_ADDRESS);//1101 0000
-//  ack=myi2c_receiveack();
-//  OLED_ShowNum(100,1,ack,3,OLED_8X16);
-//  myi2c_stop();
-//  
-//  OLED_Update();
-
-/********************************i2c遍历查找地址*****************************/
-//   MyI2C_Init();
-//   myi2c_addr_scan();
-
-/*****************************mpu6050寄存器读写测试**************************/
-//	mpu6050_init();
-//	uint8_t ID;
-//	ID=MPU6050_ReadReg(0x75);
-//	
-//	OLED_ShowHexNum(100,1,ID,2,OLED_8X16);
-	
+  menu_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-	uint8_t select_flag1=0;
+
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
 	
   while (1)
-  {
-	  
-	 select_flag1=home_page();
-    if (select_flag1 == 1)//菜单
-    {		
-		menu_ui();
-    }
-    else if (select_flag1 == 2)//设置
-    {
-      set_page();
-    }
+  {	
+		Key_Task();
+		UI_Task();
+		Sensor_Task();
+		Led_Task();
+
 
     /* USER CODE END WHILE */
 

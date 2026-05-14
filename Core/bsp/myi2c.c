@@ -33,16 +33,6 @@ uint8_t myi2c_R_SDA(void){
 //初始化函数
 void MyI2C_Init(void)
 {
-//	/*开启时钟*/
-//	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	//开启GPIOB的时钟
-//	
-//	/*GPIO初始化*/
-//	GPIO_InitTypeDef GPIO_InitStructure;
-//	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-//	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10 | GPIO_Pin_11;
-//	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-//	GPIO_Init(GPIOB, &GPIO_InitStructure);					//将PB10和PB11引脚初始化为开漏输出
-	
 	/*设置默认电平*/
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10 | GPIO_PIN_11,GPIO_PIN_SET);//设置PB10和PB11引脚初始化后默认为高电平（释放总线状态）
 }

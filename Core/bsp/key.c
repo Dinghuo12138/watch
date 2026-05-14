@@ -1,7 +1,10 @@
 #include "key.h"
 #include "menu.h"
+
 struct keys key[3]={0,0,0,0,0};
+
 uint16_t run_tim[3];
+volatile uint16_t count_mpu6050=0;//mpu6050计数
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance==TIM2){
 		key[0].key_state=HAL_GPIO_ReadPin(GPIOB,GPIO_PIN_1);
@@ -53,5 +56,32 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	}
 }
 
+//按键任务函数
+volatile uint8_t key_event=0;
+void Key_Task(void)
+{
+    if(key[0].single_flag)
+    {
+        key_event = KEY_EVENT_KEY0;
+        key[0].single_flag = 0;
+    }
+    else if(key[1].single_flag)
+    {
+        key_event = KEY_EVENT_KEY1;
+        key[1].single_flag = 0;
+    }
+    else if(key[2].single_flag)
+    {
+        key_event = KEY_EVENT_KEY2;
+        key[2].single_flag = 0;
+    }
+}
 
+//页面调用的按键事件函数
+uint8_t Key_GetEvent(void)
+{
+    uint8_t event = key_event;
+    key_event = KEY_EVENT_NONE;
+    return event;
+}
 
