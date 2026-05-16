@@ -9,11 +9,16 @@
                 "e:\\xiangmuji\\watch\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
                 "e:\\xiangmuji\\watch\\Drivers\\CMSIS\\Include",
                 "e:\\xiangmuji\\watch\\Core\\bsp",
+                "e:\\xiangmuji\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source\\include",
+                "e:\\xiangmuji\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source\\portable\\RVDS\\ARM_CM3",
+                "e:\\xiangmuji\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source\\CMSIS_RTOS",
                 "D:\\MDK-AEM-CORE\\ARM\\ARMCC\\include",
                 "D:\\MDK-AEM-CORE\\ARM\\ARMCC\\include\\rw",
                 "e:\\xiangmuji\\watch\\MDK-ARM",
                 "e:\\xiangmuji\\watch\\Core\\Src",
-                "e:\\xiangmuji\\watch\\Drivers\\STM32F1xx_HAL_Driver\\Src"
+                "e:\\xiangmuji\\watch\\Drivers\\STM32F1xx_HAL_Driver\\Src",
+                "e:\\xiangmuji\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source",
+                "e:\\xiangmuji\\watch\\Middlewares\\Third_Party\\FreeRTOS\\Source\\portable\\MemMang"
             ],
             "defines": [
                 "USE_HAL_DRIVER",

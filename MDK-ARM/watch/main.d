@@ -30,6 +30,20 @@ watch\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc.h
 watch\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rtc_ex.h
 watch\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 watch\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+watch\main.o: ../Core/Inc/FreeRTOSConfig.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM3/portmacro.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h
+watch\main.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h
 watch\main.o: ../Core/Inc/i2c.h
 watch\main.o: ../Core/Inc/rtc.h
 watch\main.o: ../Core/Inc/tim.h
@@ -42,3 +56,4 @@ watch\main.o: ../Core/bsp/delay.h
 watch\main.o: ../Core/bsp/key.h
 watch\main.o: ../Core/bsp/myi2c.h
 watch\main.o: ../Core/bsp/mpu6050.h
+watch\main.o: ../Core/Inc/FreeRTOS_demo.h

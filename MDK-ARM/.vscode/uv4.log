@@ -1,11 +1,2 @@
-*** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\MDK-AEM-CORE\ARM\ARMCC\Bin'
-Build target 'watch'
-compiling mpu6050.c...
-..\Core\bsp\mpu6050.c(71): warning:  #177-D: variable "i"  was declared but never referenced
-  	uint8_t i;
-..\Core\bsp\mpu6050.c: 1 warning, 0 errors
-linking...
-Program Size: Code=29638 RO-data=9234 RW-data=172 ZI-data=4276  
-FromELF: creating hex file...
-"watch\watch.axf" - 0 Error(s), 1 Warning(s).
-Build Time Elapsed:  00:00:02
+Load "watch\\watch.axf" 
+Erase Done.Programming Done.Verify OK.Flash Load finished at 18:29:31

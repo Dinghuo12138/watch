@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "i2c.h"
 #include "rtc.h"
 #include "tim.h"
@@ -33,7 +34,8 @@
 #include "key.h"
 #include "myi2c.h"
 #include "mpu6050.h"
-
+#include "FreeRTOS_demo.h"
+#include "FreeRTOSConfig.h"
 
 #define MPU6050_ADDRESS 0xD0
 /* USER CODE END Includes */
@@ -61,6 +63,7 @@ extern uint8_t select_flag;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -114,20 +117,26 @@ int main(void)
   menu_init();
   /* USER CODE END 2 */
 
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  // MX_FREERTOS_Init();
+
+  // /* Start scheduler */
+  // osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
 
 	HAL_GPIO_WritePin(GPIOC,GPIO_PIN_13,GPIO_PIN_SET);
-	
+	freertos_start();
   while (1)
   {	
-		Key_Task();
-		UI_Task();
-		Sensor_Task();
-		Led_Task();
-
-
+		// Key_Task();
+		// UI_Task();
+		// Sensor_Task();
+		// Led_Task();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
