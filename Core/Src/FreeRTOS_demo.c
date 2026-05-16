@@ -17,11 +17,11 @@
 TaskHandle_t start_task_handle;     
 //Key_Task
 #define Key_Task_stack_size 128
-#define Key_Task_priority   2
+#define Key_Task_priority   4
 TaskHandle_t Key_Task_handle = NULL;
 //UI_Task
 #define UI_Task_stack_size 512
-#define UI_Task_priority   4
+#define UI_Task_priority   2
 TaskHandle_t UI_Task_handle = NULL;
 //Sensor_Task
 #define Sensor_Task_stack_size 512
@@ -29,7 +29,7 @@ TaskHandle_t UI_Task_handle = NULL;
 TaskHandle_t Sensor_Task_handle = NULL;
 //Led_Task
 #define Led_Task_stack_size 128
-#define Led_Task_priority   5
+#define Led_Task_priority   1
 TaskHandle_t Led_Task_handle = NULL;
 
 //函数声明
@@ -89,9 +89,10 @@ void start_task(void *pvParameters){
 
 //Key_Task
 void Key_Task_RTOS(void *pvParameters){
+	TickType_t lastWakeTime = xTaskGetTickCount();
     while(1){
 		Key_Task();
-       	vTaskDelay(5);
+       	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(5));
     }
 }
 
@@ -99,15 +100,19 @@ void Key_Task_RTOS(void *pvParameters){
 void UI_Task_RTOS(void *pvParameters){
 	while(1){
 		UI_Task();
+		//用 uxTaskGetStackHighWaterMark() 查栈剩余空间
+		// uxTaskGetStackHighWaterMark(UI_Task_handle);
+		// printf("UI_Task剩余堆栈大小：%d字节\n", uxTaskGetStackHighWaterMark(UI_Task_handle) * 4);
        	vTaskDelay(10);
 	}
 }
 
 //Sensor_Task
 void Sensor_Task_RTOS(void *pvParameters){
+	TickType_t lastWakeTime = xTaskGetTickCount();
 	while(1){
 		Sensor_Task();
-	   	vTaskDelay(10);
+	   	vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(10));
 	}
 }
 //Led_Task
@@ -116,6 +121,18 @@ void Led_Task_RTOS(void *pvParameters){
 		Led_Task();
 	   	vTaskDelay(30);
 	}
+}
+/********************************栈溢出检测函数************************************/
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
+{
+    taskDISABLE_INTERRUPTS();
+    while (1);
+}
+
+void vApplicationMallocFailedHook(void)
+{
+    taskDISABLE_INTERRUPTS();
+    while (1);
 }
 
 

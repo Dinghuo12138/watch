@@ -68,7 +68,6 @@ uint8_t mpu6050_getID(void){
 
 //获取寄存器中的数据
 void mpu6050_GetValue(struct mpu6050_OUT *data){
-	uint8_t i;
 	uint8_t buf[14];
 	// for(i=0;i<14;i++){
 	// 	buf[i]=Sensor_ReadReg(MPU6050_ADDRESS,MPU6050_ACCEL_XOUT_H+i);//循环接收数据0x3B->0x48
@@ -97,7 +96,7 @@ void max30102_init(void)
 	Sensor_WriteReg(MAX30102_ADDRESS, MAX30102_REG_MODE_CONFIG, 0x40);
 	while ((Sensor_ReadReg(MAX30102_ADDRESS, MAX30102_REG_MODE_CONFIG) & 0x40) && timeout)
 	{
-		HAL_Delay(1);
+		vTaskDelay(1);
 		timeout--;
 	}
 
@@ -124,7 +123,7 @@ void max30102_init(void)
 
 	/*修改*/ //最后进入SpO2模式，开始产生RED/IR FIFO数据
 	Sensor_WriteReg(MAX30102_ADDRESS, MAX30102_REG_MODE_CONFIG, 0x03);
-	HAL_Delay(20);
+	vTaskDelay(20);
 }
 
 /*修改*/ //只清FIFO，不改变工作模式；进入测量页面时调用一次即可

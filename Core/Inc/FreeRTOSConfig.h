@@ -123,6 +123,10 @@ header file. */
 #define configASSERT( x ) if ((x) == 0) {taskDISABLE_INTERRUPTS(); for( ;; );}
 #define configUSE_TIME_SLICING                          1//ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Æ¬ï¿½ï¿½ï¿½ï¿½
 
+/*************************************Õ»Òç³ö¼ì²â************************************/
+#define configCHECK_FOR_STACK_OVERFLOW 2
+#define configUSE_MALLOC_FAILED_HOOK 1
+
 
 /* USER CODE END 1 */
 
